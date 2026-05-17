@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechAcademy — Capacitación Tecnológica Presencial</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Syne (display) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons (versión fija para evitar problemas de resolución con @latest) -->
+  <script src="https://unpkg.com/lucide@0.441.0/dist/umd/lucide.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50:  '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#1e1b4b',
+            },
+            accent: {
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+            },
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.6s ease both',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%':   { opacity: '0', transform: 'translateY(24px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+
+    /* Noise texture overlay on hero */
+    .hero-noise::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* Animated gradient mesh for hero */
+    .mesh-bg {
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(99,102,241,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(16,185,129,0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 70% at 50% 50%, rgba(30,27,75,0.8) 0%, transparent 80%),
+        #0f172a;
+    }
+
+    /* Staggered animation delays for course cards */
+    .card-1 { animation-delay: 0.1s; }
+    .card-2 { animation-delay: 0.22s; }
+    .card-3 { animation-delay: 0.34s; }
+
+    /* Subtle grid pattern for sections */
+    .grid-pattern {
+      background-image: linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 3px; }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 antialiased">
+
+  <!-- ══════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════ -->
+  <header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/60">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+          <i data-lucide="zap" class="w-4 h-4 text-white"></i>
+        </span>
+        <span class="font-display text-xl font-bold tracking-tight">
+          Tech<span class="text-indigo-400">Academy</span>
+        </span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+        <li><a href="#inicio"      class="hover:text-white transition-colors duration-200">Inicio</a></li>
+        <li><a href="#cursos"      class="hover:text-white transition-colors duration-200">Cursos</a></li>
+        <li><a href="#beneficios"  class="hover:text-white transition-colors duration-200">Nosotros</a></li>
+        <li><a href="#footer"      class="hover:text-white transition-colors duration-200">Contacto</a></li>
+      </ul>
+
+      <!-- CTA Button -->
+      <div class="hidden md:block">
+        <a href="#cursos"
+           class="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold
+                  transition-all duration-200 shadow-lg shadow-indigo-600/30 hover:shadow-indigo-500/40 hover:-translate-y-0.5">
+          Inscríbete Aquí
+        </a>
+      </div>
+
+      <!-- Hamburger -->
+      <button id="menu-toggle" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors duration-200" aria-label="Abrir menú">
+        <i data-lucide="menu" class="w-5 h-5" id="icon-open"></i>
+        <i data-lucide="x"    class="w-5 h-5 hidden" id="icon-close"></i>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 bg-slate-950">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-3">
+        <a href="#inicio"     class="text-slate-300 hover:text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">Inicio</a>
+        <a href="#cursos"     class="text-slate-300 hover:text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">Cursos</a>
+        <a href="#beneficios" class="text-slate-300 hover:text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">Nosotros</a>
+        <a href="#footer"     class="text-slate-300 hover:text-white py-2 px-3 rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">Contacto</a>
+        <a href="#cursos"     class="mt-1 px-5 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-semibold text-center hover:bg-indigo-500 transition-colors">Inscríbete Aquí</a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ══════════════════════════════════════════════
+       HERO SECTION
+  ══════════════════════════════════════════════ -->
+  <section id="inicio" class="relative min-h-screen flex items-center mesh-bg hero-noise overflow-hidden pt-16">
+
+    <!-- Decorative blurred circles -->
+    <div class="absolute top-32 left-1/4 w-96 h-96 rounded-full bg-indigo-600/15 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-24 right-1/4 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none"></div>
+
+    <!-- Diagonal accent line -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <svg class="absolute -right-32 top-0 h-full w-auto opacity-5" viewBox="0 0 400 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="200" y1="0" x2="0" y2="800" stroke="#6366f1" stroke-width="1.5"/>
+        <line x1="280" y1="0" x2="80" y2="800" stroke="#6366f1" stroke-width="1"/>
+        <line x1="360" y1="0" x2="160" y2="800" stroke="#6366f1" stroke-width="0.5"/>
+      </svg>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
+      <div class="max-w-3xl">
+
+        <!-- Pill badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-8 animate-[fadeUp_0.5s_ease_both]">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Inscripciones abiertas — 2025
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight mb-6 animate-[fadeUp_0.6s_0.1s_ease_both] opacity-0 [animation-fill-mode:both]">
+          Aprende tecnología<br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-emerald-400">
+            cara a cara,
+          </span><br/>
+          sin excusas.
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-slate-400 text-lg sm:text-xl leading-relaxed max-w-xl mb-10 animate-[fadeUp_0.6s_0.22s_ease_both] opacity-0 [animation-fill-mode:both]">
+          Cursos <strong class="text-white font-semibold">100% presenciales y prácticos</strong> de SQL Server, Power BI y Big Data.
+          Instructores en vivo, laboratorios reales y una comunidad que te impulsa.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 animate-[fadeUp_0.6s_0.34s_ease_both] opacity-0 [animation-fill-mode:both]">
+          <a href="#cursos"
+             class="group inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500
+                    text-white font-semibold text-base shadow-xl shadow-indigo-600/30 hover:shadow-indigo-500/40
+                    transition-all duration-300 hover:-translate-y-0.5">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+            Ver Cursos
+          </a>
+          <a href="#beneficios"
+             class="group inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl
+                    border border-slate-700 hover:border-indigo-500/60 bg-slate-800/50 hover:bg-slate-800
+                    text-slate-300 hover:text-white font-semibold text-base
+                    transition-all duration-300 hover:-translate-y-0.5">
+            Más Información
+            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200"></i>
+          </a>
+        </div>
+
+        <!-- Stats row -->
+        <div class="flex flex-wrap gap-8 mt-14 animate-[fadeUp_0.6s_0.46s_ease_both] opacity-0 [animation-fill-mode:both]">
+          <div>
+            <p class="text-3xl font-display font-bold text-white">+1,200</p>
+            <p class="text-sm text-slate-500 mt-0.5">Egresados certificados</p>
+          </div>
+          <div class="w-px bg-slate-800"></div>
+          <div>
+            <p class="text-3xl font-display font-bold text-white">12</p>
+            <p class="text-sm text-slate-500 mt-0.5">Años de experiencia</p>
+          </div>
+          <div class="w-px bg-slate-800"></div>
+          <div>
+            <p class="text-3xl font-display font-bold text-white">98%</p>
+            <p class="text-sm text-slate-500 mt-0.5">Tasa de satisfacción</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom fade -->
+    <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-slate-950 to-transparent pointer-events-none"></div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       COURSES SECTION
+  ══════════════════════════════════════════════ -->
+  <section id="cursos" class="py-24 bg-slate-950 grid-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Section header -->
+      <div class="text-center mb-16">
+        <p class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-3">Oferta Académica</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white">
+          Cursos disponibles
+        </h2>
+        <p class="mt-4 text-slate-400 text-lg max-w-xl mx-auto">
+          Tres programas intensivos diseñados para llevarte del cero al profesional en el menor tiempo posible.
+        </p>
+      </div>
+
+      <!-- Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- ── Card 1: SQL Server ── -->
+        <article class="card-1 animate-fade-up opacity-0 [animation-fill-mode:both]
+                        group flex flex-col justify-between rounded-2xl
+                        bg-slate-900 border border-slate-800
+                        hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10
+                        hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+
+          <!-- Card top accent -->
+          <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 to-violet-600"></div>
+
+          <div class="p-7 flex flex-col gap-5 flex-1">
+            <!-- Icon + badge row -->
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-xl bg-indigo-600/15 border border-indigo-600/20 flex items-center justify-center">
+                <i data-lucide="database" class="w-6 h-6 text-indigo-400"></i>
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                Presencial
+              </span>
+            </div>
+
+            <!-- Title & description -->
+            <div>
+              <h3 class="font-display text-xl font-bold text-white mb-2 leading-snug">
+                SQL Server para la Toma de Decisiones
+              </h3>
+              <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">
+                Domina consultas avanzadas, procedimientos almacenados y reportes de negocio directamente sobre bases de datos reales.
+              </p>
+            </div>
+
+            <!-- Meta info -->
+            <ul class="flex flex-col gap-2.5 text-sm text-slate-400 mt-auto">
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="clock" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                <span><strong class="text-slate-200 font-medium">40 horas</strong> — 10 sesiones de 4h</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="building-2" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                <span>Sede Centro, <strong class="text-slate-200 font-medium">Aula 402</strong></span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="calendar" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                <span>Próximo inicio: <strong class="text-slate-200 font-medium">3 Feb 2025</strong></span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card Footer -->
+          <div class="px-7 pb-7">
+            <a href="#"
+               class="w-full flex items-center justify-center gap-2 py-3 rounded-xl
+                      border border-indigo-500/40 text-indigo-400 hover:bg-indigo-600 hover:text-white hover:border-indigo-600
+                      text-sm font-semibold transition-all duration-200">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              Ver Temario
+            </a>
+          </div>
+        </article>
+
+
+        <!-- ── Card 2: Power BI ── -->
+        <article class="card-2 animate-fade-up opacity-0 [animation-fill-mode:both]
+                        group flex flex-col justify-between rounded-2xl
+                        bg-slate-900 border border-slate-800
+                        hover:border-violet-500/50 hover:shadow-2xl hover:shadow-violet-500/10
+                        hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+
+          <div class="h-1.5 w-full bg-gradient-to-r from-violet-600 to-pink-500"></div>
+
+          <div class="p-7 flex flex-col gap-5 flex-1">
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-xl bg-violet-600/15 border border-violet-600/20 flex items-center justify-center">
+                <i data-lucide="bar-chart-2" class="w-6 h-6 text-violet-400"></i>
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                Presencial
+              </span>
+            </div>
+
+            <div>
+              <h3 class="font-display text-xl font-bold text-white mb-2 leading-snug">
+                Power BI: Cuadros de Mando Profesionales
+              </h3>
+              <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">
+                Crea dashboards interactivos y visualizaciones que conviertan datos en decisiones estratégicas para tu organización.
+              </p>
+            </div>
+
+            <ul class="flex flex-col gap-2.5 text-sm text-slate-400 mt-auto">
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="clock" class="w-4 h-4 text-violet-400 shrink-0"></i>
+                <span><strong class="text-slate-200 font-medium">32 horas</strong> — 8 sesiones de 4h</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="building-2" class="w-4 h-4 text-violet-400 shrink-0"></i>
+                <span>Sede Norte, <strong class="text-slate-200 font-medium">Lab B-201</strong></span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="calendar" class="w-4 h-4 text-violet-400 shrink-0"></i>
+                <span>Próximo inicio: <strong class="text-slate-200 font-medium">10 Feb 2025</strong></span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="px-7 pb-7">
+            <a href="#"
+               class="w-full flex items-center justify-center gap-2 py-3 rounded-xl
+                      border border-violet-500/40 text-violet-400 hover:bg-violet-600 hover:text-white hover:border-violet-600
+                      text-sm font-semibold transition-all duration-200">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              Ver Temario
+            </a>
+          </div>
+        </article>
+
+
+        <!-- ── Card 3: Big Data ── -->
+        <article class="card-3 animate-fade-up opacity-0 [animation-fill-mode:both]
+                        group flex flex-col justify-between rounded-2xl
+                        bg-slate-900 border border-slate-800
+                        hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10
+                        hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+
+          <div class="h-1.5 w-full bg-gradient-to-r from-emerald-500 to-cyan-500"></div>
+
+          <div class="p-7 flex flex-col gap-5 flex-1">
+            <div class="flex items-start justify-between">
+              <span class="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center">
+                <i data-lucide="layers" class="w-6 h-6 text-emerald-400"></i>
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                Presencial
+              </span>
+            </div>
+
+            <div>
+              <h3 class="font-display text-xl font-bold text-white mb-2 leading-snug">
+                Big Data &amp; Analytics Fundamentos
+              </h3>
+              <p class="text-slate-400 text-sm leading-relaxed line-clamp-2">
+                Comprende el ecosistema Hadoop, Spark y técnicas de análisis masivo de datos en entornos de laboratorio reales.
+              </p>
+            </div>
+
+            <ul class="flex flex-col gap-2.5 text-sm text-slate-400 mt-auto">
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="clock" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                <span><strong class="text-slate-200 font-medium">48 horas</strong> — 12 sesiones de 4h</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="building-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                <span>Sede Centro, <strong class="text-slate-200 font-medium">Lab Data 105</strong></span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="calendar" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                <span>Próximo inicio: <strong class="text-slate-200 font-medium">17 Feb 2025</strong></span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="px-7 pb-7">
+            <a href="#"
+               class="w-full flex items-center justify-center gap-2 py-3 rounded-xl
+                      border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-600
+                      text-sm font-semibold transition-all duration-200">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              Ver Temario
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       BENEFITS SECTION
+  ══════════════════════════════════════════════ -->
+  <section id="beneficios" class="py-24 bg-slate-900/50 border-y border-slate-800/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Section header -->
+      <div class="text-center mb-16">
+        <p class="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-3">¿Por qué presencial?</p>
+        <h2 class="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white">
+          La diferencia la hace<br/>estar ahí.
+        </h2>
+        <p class="mt-4 text-slate-400 text-lg max-w-xl mx-auto">
+          La tecnología se aprende mejor cuando puedes tocarla, fallar en seguro y preguntar en tiempo real.
+        </p>
+      </div>
+
+      <!-- Benefits Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <!-- Benefit 1 -->
+        <div class="group relative rounded-2xl bg-slate-900 border border-slate-800 p-8
+                    hover:border-indigo-500/40 hover:-translate-y-1 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/5">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600/20 to-indigo-600/5
+                      border border-indigo-600/20 flex items-center justify-center mb-6">
+            <i data-lucide="monitor" class="w-7 h-7 text-indigo-400"></i>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Laboratorios Equipados</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Cada participante trabaja en su propia estación con software licenciado, servidores reales y conjuntos de datos empresariales listos para practicar desde el primer día.
+          </p>
+          <div class="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-indigo-400"></i>
+          </div>
+        </div>
+
+        <!-- Benefit 2 -->
+        <div class="group relative rounded-2xl bg-slate-900 border border-slate-800 p-8
+                    hover:border-violet-500/40 hover:-translate-y-1 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/5">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600/20 to-violet-600/5
+                      border border-violet-600/20 flex items-center justify-center mb-6">
+            <i data-lucide="users" class="w-7 h-7 text-violet-400"></i>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Networking Activo</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Construye conexiones genuinas con compañeros de tu industria. Los mejores empleos se consiguen a través de personas que conociste en el aula, no en un foro de internet.
+          </p>
+          <div class="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-violet-400"></i>
+          </div>
+        </div>
+
+        <!-- Benefit 3 -->
+        <div class="group relative rounded-2xl bg-slate-900 border border-slate-800 p-8
+                    hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5
+                      border border-emerald-500/20 flex items-center justify-center mb-6">
+            <i data-lucide="message-circle" class="w-7 h-7 text-emerald-400"></i>
+          </div>
+          <h3 class="font-display text-xl font-bold text-white mb-3">Soporte del Instructor en Vivo</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Cuando te trabas, el instructor está ahí para desbloquearte al instante. Sin tickets, sin esperas de 48 horas, sin tutoriales de YouTube que no responden tu duda exacta.
+          </p>
+          <div class="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <i data-lucide="arrow-up-right" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom CTA band -->
+      <div class="mt-16 rounded-2xl bg-gradient-to-r from-indigo-900/40 via-slate-900 to-emerald-900/30
+                  border border-slate-700/50 p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <h3 class="font-display text-2xl sm:text-3xl font-bold text-white mb-2">¿Listo para el primer paso?</h3>
+          <p class="text-slate-400 text-base">Plazas limitadas por aula para garantizar calidad de aprendizaje.</p>
+        </div>
+        <a href="#cursos"
+           class="shrink-0 px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600
+                  text-white font-semibold text-base shadow-xl shadow-indigo-500/25
+                  hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap">
+          Ver Todos los Cursos
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════ -->
+  <footer id="footer" class="bg-slate-950 border-t border-slate-800/60 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+
+        <!-- Brand column -->
+        <div class="lg:col-span-1">
+          <a href="#" class="flex items-center gap-2 mb-4">
+            <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center">
+              <i data-lucide="zap" class="w-4 h-4 text-white"></i>
+            </span>
+            <span class="font-display text-xl font-bold">Tech<span class="text-indigo-400">Academy</span></span>
+          </a>
+          <p class="text-slate-500 text-sm leading-relaxed mb-5">
+            Formación tecnológica presencial de alto impacto para profesionales que quieren resultados reales.
+          </p>
+          <!-- Social icons -->
+          <div class="flex items-center gap-3">
+            <a href="#" aria-label="Twitter/X" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-indigo-600 flex items-center justify-center transition-colors duration-200">
+              <i data-lucide="twitter" class="w-4 h-4 text-slate-400 hover:text-white"></i>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-indigo-600 flex items-center justify-center transition-colors duration-200">
+              <i data-lucide="linkedin" class="w-4 h-4 text-slate-400 hover:text-white"></i>
+            </a>
+            <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-indigo-600 flex items-center justify-center transition-colors duration-200">
+              <i data-lucide="instagram" class="w-4 h-4 text-slate-400 hover:text-white"></i>
+            </a>
+            <a href="#" aria-label="YouTube" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-indigo-600 flex items-center justify-center transition-colors duration-200">
+              <i data-lucide="youtube" class="w-4 h-4 text-slate-400 hover:text-white"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="text-white font-semibold text-sm mb-5 uppercase tracking-wider">Navegación</h4>
+          <ul class="flex flex-col gap-3">
+            <li><a href="#inicio"     class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Inicio</a></li>
+            <li><a href="#cursos"     class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Cursos</a></li>
+            <li><a href="#beneficios" class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Nosotros</a></li>
+            <li><a href="#footer"     class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Courses -->
+        <div>
+          <h4 class="text-white font-semibold text-sm mb-5 uppercase tracking-wider">Cursos</h4>
+          <ul class="flex flex-col gap-3">
+            <li><a href="#" class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">SQL Server</a></li>
+            <li><a href="#" class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Power BI</a></li>
+            <li><a href="#" class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Big Data & Analytics</a></li>
+            <li><a href="#" class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Python para Datos</a></li>
+            <li><a href="#" class="text-slate-500 hover:text-indigo-400 text-sm transition-colors">Machine Learning</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h4 class="text-white font-semibold text-sm mb-5 uppercase tracking-wider">Contacto</h4>
+          <ul class="flex flex-col gap-4">
+            <li class="flex items-start gap-3 text-sm text-slate-500">
+              <i data-lucide="map-pin" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5"></i>
+              Av. Providencia 1234, Piso 6 — Sede Centro
+            </li>
+            <li class="flex items-center gap-3 text-sm text-slate-500">
+              <i data-lucide="phone" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+              +56 2 2345 6789
+            </li>
+            <li class="flex items-center gap-3 text-sm text-slate-500">
+              <i data-lucide="mail" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+              hola@techacademy.cl
+            </li>
+            <li class="flex items-center gap-3 text-sm text-slate-500">
+              <i data-lucide="clock" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+              Lun – Vie, 08:30 – 19:00
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600">
+        <p>© 2025 TechAcademy SpA. Todos los derechos reservados.</p>
+        <div class="flex items-center gap-5">
+          <a href="#" class="hover:text-slate-400 transition-colors">Política de Privacidad</a>
+          <a href="#" class="hover:text-slate-400 transition-colors">Términos de Uso</a>
+          <a href="#" class="hover:text-slate-400 transition-colors">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════════════ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // ── Lucide icons ──────────────────────────────────────
+      // lucide UMD is loaded synchronously above, so createIcons()
+      // is safe to call once the DOM is ready.
+      lucide.createIcons();
+
+      // ── Mobile menu toggle ────────────────────────────────
+      const toggle    = document.getElementById('menu-toggle');
+      const menu      = document.getElementById('mobile-menu');
+      const iconOpen  = document.getElementById('icon-open');
+      const iconClose = document.getElementById('icon-close');
+
+      toggle.addEventListener('click', () => {
+        const isOpen = !menu.classList.contains('hidden');
+        menu.classList.toggle('hidden', isOpen);
+        iconOpen.classList.toggle('hidden', !isOpen);
+        iconClose.classList.toggle('hidden', isOpen);
+      });
+
+      // Close mobile menu when a nav link is clicked
+      menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          menu.classList.add('hidden');
+          iconOpen.classList.remove('hidden');
+          iconClose.classList.add('hidden');
+        });
+      });
+
+      // ── Smooth scroll ─────────────────────────────────────
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            const offset = 72; // navbar height
+            const top = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // ── Scroll-triggered fade-up for cards & benefits ─────
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = 'running';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.animate-fade-up').forEach(el => {
+        el.style.animationPlayState = 'paused';
+        observer.observe(el);
+      });
+
+    }); // end DOMContentLoaded
+  </script>
+</body>
+</html>
